@@ -17,11 +17,11 @@ jobs:
     - name: 🔨 Build
       run: npm run build
     - name: Sync Files
-        uses: SamKirkland/web-deploy@v1
-        with:
-          target-server: ${{ secrets.SERVER }}
-          remote-user: ${{ secrets.USER }}
-          ssh-key: ${{ secrets.SSH_KEY }}
-          destination-path: ${{ secrets.PATH }}
-          source-path: ${{ github.workspace }}/_site/
-          rsync-options: --dry-run  --verbose --progress --human-readable --exclude=node_modules* --exclude=.git*  --exclude=.gitignore
+      uses: SamKirkland/web-deploy@v1
+      with:
+        target-server: ${{ secrets.SERVER }}
+        remote-user: ${{ secrets.USER }}
+        ssh-key: ${{ secrets.SSH_KEY }}
+        destination-path: ${{ secrets.PATH }}
+        source-path: ${{ github.workspace }}/_site/
+        rsync-options: --dry-run  --verbose --progress --human-readable --exclude=node_modules* --exclude=.git*  --exclude=.gitignore
