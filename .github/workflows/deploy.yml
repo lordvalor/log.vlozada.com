@@ -9,10 +9,10 @@ jobs:
       - name: Get code
         uses: actions/checkout@v4
 
-      - name: Use node 22
+      - name: Use node 20
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 20
       - name: Build Project
         run: |
           npm install
