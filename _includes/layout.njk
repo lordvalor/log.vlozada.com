@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>{{ title or "log.vlozada.com" }}</title>
+  <meta name="description" content="{{ description or 'log de @lordvalor: Linux, código, filosofía y vida minimalista' }}" />
+  <meta name="author" content="{{ metadata.author.name }}" />
+
+  <!-- Open Graph (Facebook, Mastodon, etc) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="{{ title or 'metadata.title' }}" />
+  <meta property="og:description" content="{{ description or 'Blog de @lordvalor: Linux, código, filosofía y vida minimalista' }}" />
+  <meta property="og:url" content="https://log.vlozada.com/{{ page.url }}" />
+  <meta property="og:site_name" content="log.vlozada.com" />
+
+  <!-- Twitter Card (también funciona para Mastodon) -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="{{ metadata.title or title }}" />
+  <meta name="twitter:description" content="{{ metadata.description or 'Linux, código, filosofía y vida minimalista' }}" />
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml" />
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="container">
+  <header>
+    <h1><a href="/">{{ title }}</a></h1>
+  </header>
+  <main>
+    {{ content | safe }}
+  </main>
+  <footer>
+    <p>by valdemar - © {{ "now" | date("yyyy") }}</p>
+  <a href="https://vlozada.com">::about</a>  <a href="/">::logs</a>  <a href="/feed.xml">::feed</a>
+  </footer>
+</body>
+</html>

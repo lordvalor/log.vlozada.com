@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Docker Part 1</title>
+  <meta name="description" content="Instalacion de docker desde cero (primera parte)" />
+  <meta name="author" content="Valdemar Lozada" />
+
+  <!-- Open Graph (Facebook, Mastodon, etc) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Docker Part 1" />
+  <meta property="og:description" content="Instalacion de docker desde cero (primera parte)" />
+  <meta property="og:url" content="https://log.vlozada.com//posts/docker-primera-parte/" />
+  <meta property="og:site_name" content="log.vlozada.com" />
+
+  <!-- Twitter Card (también funciona para Mastodon) -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Valdemar Lozada" />
+  <meta name="twitter:description" content="Administrador de sistemas GNU/Linux, entusiasta del desarrollo web y defensor de la privacidad cibernética." />
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml" />
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="container">
+  <header>
+    <h1><a href="/">Docker Part 1</a></h1>
+  </header>
+  <main>
+    <p>He decidido comenzar a escribir este mini tutorial sobre <a href="https://www.docker.com/">Docker</a>, debido a que muchas personas que recien comienzan en el este mundo de la tecnología, algunos me han pedido que les explique un poco sobre la creación de contenedores, el cual ha calado mucho y que en la actualidad es muy importante aprender usar bien. Ya seas Desarrollador de Software, Administrador de sistema, Arquitecto de soluciones. Incluso si deseas trabajar como QA o cualquiera de las áreas de tecnologías actuales, eventualmente te vas a topar con un  <strong>Contenedor en Docker</strong>.</p>
+<p>Este tutorial no prentender abarcar cada uno de los conceptos sobre Docker. si estas leyendo esto quiero creer que ya tienes los conceptos claros de lo que es y de lo que puede hacer docker, solo me enfocare mas que nada en aspectos técnicos, para comenzar a trabajar con Docker de manera básica pero con la posiblidad que luego sigas pronfundizando mas sobre esta tecnología.</p>
+<p>Estare plasmando simplemente el resultado de mis investigaciones y compilando información de diversas fuentes o recursos que usé, cuando estuve aprendiendo a utilizar Docker.</p>
+<p>Entonces, como cualquier herramienta que vamos a utilizar, debemos instalarla.</p>
+<h2>Instalación de  Docker</h2>
+<p>En esta oportunidad, estaremos trabajando con la instalación en Debian GNU linux en su version 12</p>
+<p>Antes de instalar Docker Engine, necesitamos desinstalar cualquier paquete relacionado con Docker que nos pueda generar un conflicto de versiones, esto debido a que lo mas seguro es que al instalar Debian, este ya venga con unos paquetes no-oficiales:</p>
+<p>normalmente estos paquetes son:</p>
+<ul>
+<li><code>docker.io</code></li>
+<li><code>docker-composer</code></li>
+<li><code>docker-doc</code></li>
+<li><code>podman-docker</code></li>
+</ul>
+<p>Dicho esto, lo que debemos ejecutar en nuestra consola para remover estos paquetes seria el siguiente comnando:</p>
+<pre><code class="language-bash">for pkg in docker.io docker-doc docker-compose podman-docker containerd runc; do sudo apt-get remove $pkg; done
+</code></pre>
+<p>Sin embargo, luego de ejecutar esto es posible que <code>apt-get</code> nos informe que no hay de estos paquetes instalados.</p>
+<p>Tambíen es importante mencionar que si haz usando docker con estos paquetes por defecto, al hacer esta desinstalación, lo que son, Imagenes, Contenedores, Volumenes y networks, son almacenadas en <code>/var/lib/docker</code> y NO son eliminados automáticamente al desinstalar Docker, asi que si lo que quieres es realizar una instalación limpia y deseas remover esa data existente, debemos realizar los siguientes pasos.</p>
+<h2>Desinstalar Docker Engine</h2>
+<p>1- Desinstalamos Docker Engine, CLI, containerd y Docker composer por completo</p>
+<pre><code class="language-bash">sudo apt-get purge docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin docker-ce-rootless-extras
+</code></pre>
+<p>2- Imágenes, contenedores, volumenes, o configuraciones personalizadas en tu host NO seran removidos automáticamente asi que para borrar todo debemos hacer lo siguiente:</p>
+<pre><code class="language-bash">sudo rm -rf /var/lib/docker
+sudo rm -rf /var/lib/containerd/
+</code></pre>
+<p>3- Eliminamos las llaves del source.list</p>
+<pre><code class="language-bash"> sudo rm /etc/apt/sources.list.d/docker.list
+ sudo rm /etc/apt/keyrings/docker.asc
+</code></pre>
+<h2>Instalamos usando el repositorio apt</h2>
+<p>Antes de instalar por primera vez Docker en una nueva maquina, necesitas configurar los repositorios de Docker en <code>apt</code> y luego se podra instalar la última versión de docker.</p>
+<p>1- Configuramos repositorios de Docker.</p>
+<pre><code class="language-bash"># Add Docker's official GPG key:
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  &quot;deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian \
+  $(. /etc/os-release &amp;&amp; echo &quot;$VERSION_CODENAME&quot;) stable&quot; | \
+  sudo tee /etc/apt/sources.list.d/docker.list &gt; /dev/null
+sudo apt-get update
+</code></pre>
+<blockquote>
+<p><strong>NOTA</strong> Si usas una Distribución derivada de debian, como Kali Linux, necesitas substituir la parte de este comando donde dice CODENAME. <code>$(. /etc/os-release &amp;&amp; echo &quot;$VERSION_CODENAME&quot;)</code>
+Remplaza la parte donde dice condename por la versión que corresponda, como es <code>bookworm</code>, por ejemplo.</p>
+</blockquote>
+<p>2- Instalamos los paquetes de docker en su última versión.</p>
+<pre><code class="language-bash"> sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+</code></pre>
+<p>3- Ahora para verificar que tenemos Docker funcionando correctamente corremos la típica imagen de prueba <code>hello-world</code>.</p>
+<pre><code class="language-bash"> sudo docker run hello-world
+</code></pre>
+<p>Este comando, lo que hace es descargar una imágen de prueba y levantar el Contenedor, cuando este contenedor corre, imprime un mensaje de confirmación y sale.</p>
+<p>Si todo ha sido exitoso, ahora tu tienes La última versión de Docker Engine instalada correctamente.</p>
+<p>Si hasta acá tienes alguna duda, recuerda consultar la <a href="https://docs.docker.com/">documentacion Oficial de Docker</a></p>
+<p><a href="/blog/docker-segunda-parte/">Ver Segunda parte</a></p>
+
+  </main>
+  <footer>
+    <p>by valdemar - © 2025</p>
+  <a href="https://vlozada.com">::about</a>  <a href="/">::logs</a>  <a href="/feed.xml">::feed</a>
+  </footer>
+</body>
+</html>

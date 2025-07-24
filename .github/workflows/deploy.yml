@@ -1,0 +1,28 @@
+name: Publish log
+on: push
+jobs:
+  web-deploy:
+    name: Deploy web site
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Get code
+        uses: actions/checkout@v4
+
+      - name: Use node 20
+        uses: actions/setup-node@v2
+        with:
+          node-version: "20"
+      - name: Build Project
+        run: |
+          npm install 
+          npm run build
+      - name: Sync Files
+        uses: SamKirkland/web-deploy@v1
+        with:
+          target-server: ${{ secrets.SERVER }}
+          remote-user: ${{ secrets.USER }}
+          ssh-key: ${{ secrets.SSH_KEY }}
+          destination-path: ${{ secrets.PATH }}
+          source-path: ${{ github.workspace }}/_site/
+          rsync-options: --dry-run

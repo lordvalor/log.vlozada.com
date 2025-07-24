@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Docker Part 2</title>
+  <meta name="description" content="Instalación de docker desde cero (Segunda parte)" />
+  <meta name="author" content="Valdemar Lozada" />
+
+  <!-- Open Graph (Facebook, Mastodon, etc) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Docker Part 2" />
+  <meta property="og:description" content="Instalación de docker desde cero (Segunda parte)" />
+  <meta property="og:url" content="https://log.vlozada.com//posts/docker-segunda-parte/" />
+  <meta property="og:site_name" content="log.vlozada.com" />
+
+  <!-- Twitter Card (también funciona para Mastodon) -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Valdemar Lozada" />
+  <meta name="twitter:description" content="Administrador de sistemas GNU/Linux, entusiasta del desarrollo web y defensor de la privacidad cibernética." />
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml" />
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="container">
+  <header>
+    <h1><a href="/">Docker Part 2</a></h1>
+  </header>
+  <main>
+    <p>En nuestra <a href="/blog/docker-primera-parte/"><strong>primera parte</strong> de Instalación de docker desde Cero</a> dejamos perfectamente instalado y trabajando todo para comenzar a conocer mas sobre contenedores.</p>
+<p>Pues manos a las obra. comenzamos a conocer sobre contenedores Docker y algunos de sus principales comandos.</p>
+<p>Cuando trabajamos con contenedores, vamos a encontrar muchos de ellos listos para trabajar, solo descargarlos y levantar su contenedor. Toda esta gama de contenedores la podemos encontrar al alcance de un <code>docker pull</code>, la mayoria de imagenes oficiales estan alojadas en <a href="https://hub.docker.com/">Docker Hub</a></p>
+<p>Sin embargo, uno de los casos que siempre debemos tener en cuenta es trabajar con imagenes y/o contenedores propios o con algunos cambios que necesitamos puntualmente con los cuales queremos muchas veces tomar un contenedor existente, modificar algo puntualmente y luego crear una imagen a partir de ella.</p>
+<p>Dicho esto, aca les traigo un ejemplo en el que vamos a descargar una imagen de debian, instalamos Nginx y luego crearemos una imagen de Debian con Nginx y con nuestras modificaciones.</p>
+<h2>Descargamos la Imagen de la última version de Debian</h2>
+<pre><code class="language-bash">
+docker pull debian:latest
+</code></pre>
+<p>Luego de terminar la descarga verificamos que ya tenemos la imagen</p>
+<pre><code class="language-bash">$ docker images
+
+REPOSITORY   TAG       IMAGE ID       CREATED      SIZE
+debian       latest    49081a1edb0b   2 week ago   117MB
+
+</code></pre>
+<h2>Levantamos el contenedor e instalamos Nginx</h2>
+<pre><code class="language-bash">docker run debian /bin/bash -c &quot;apt-get update; apt-get -y install nginx&quot;
+</code></pre>
+<p>Esto inicia el <code>contenedor</code> con la imagen  <code>debian:latest</code> descargada previamente y luego procede a instalar nginx en dicho contenedor.</p>
+<p>comprobamos que nuestro contenedor esta funcionando con los cambios (instalación) que acabamos de realizar.</p>
+<pre><code class="language-bash">docker ps -a | head -2  
+</code></pre>
+<p>La salida nos indica que efectivamente se esta ejecutando un contenedos con la imagen de debian y el comando <code>apt-get install</code> que hicimos.</p>
+<pre><code class="language-bash">CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS                       PORTS     NAMES
+22d1b1ecdd1b   debian    &quot;/bin/bash -c 'apt-g…&quot;   13 seconds ago   Exited (0) 1 second ago                sharp_wilbur
+</code></pre>
+<h2>Guardando los cambios en una imagen docker</h2>
+<p>Ahora bien, queremos conservar estos cambios en una imagen para reutilizar en un futuro en otros proyectos similares, lo hacemos de la siguiente manenra, y para ellos necesitamos el <code>Docker ID</code> que se muestra en la primera columna.</p>
+<pre><code class="language-bash">docker commit 22d1b1ecdd1b vlozada/debian-nginx
+sha256:5a202ab0ab76404d7a13a6c18980a79d9a6fcfd7ece88b393f1d44835f1c0c81
+
+</code></pre>
+<p>De esta manera hemos generado una imagen basada en debian con nuestros cambios y lo podemos comprobar con el comando <code>docker images</code></p>
+<pre><code class="language-bash">$ docker images
+
+REPOSITORY               TAG       IMAGE ID       CREATED          SIZE
+vlozada/debian-nginx   latest    5a202ab0ab76   12 seconds ago   153MB
+debian                   latest    49081a1edb0b   9 days ago       116MB
+
+
+</code></pre>
+<p>Listo, ahora podemos generar un contenedor usando nuestra imagen personalizada basada en debian.</p>
+<pre><code class="language-bash">docker run vlozada/debian-nginx /usr/bin/which nginx
+
+/usr/sbin/nginx 
+</code></pre>
+
+  </main>
+  <footer>
+    <p>by valdemar - © 2025</p>
+  <a href="https://vlozada.com">::about</a>  <a href="/">::logs</a>  <a href="/feed.xml">::feed</a>
+  </footer>
+</body>
+</html>

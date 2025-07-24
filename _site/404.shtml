@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>404 - Página no encontrada</title>
+  <meta name="description" content="Lo sentimos, la página que buscas no existe." />
+  <meta name="author" content="Valdemar Lozada" />
+
+  <!-- Open Graph (Facebook, Mastodon, etc) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="404 - Página no encontrada" />
+  <meta property="og:description" content="Lo sentimos, la página que buscas no existe." />
+  <meta property="og:url" content="https://log.vlozada.com//404.shtml" />
+  <meta property="og:site_name" content="log.vlozada.com" />
+
+  <!-- Twitter Card (también funciona para Mastodon) -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Valdemar Lozada" />
+  <meta name="twitter:description" content="Administrador de sistemas GNU/Linux, entusiasta del desarrollo web y defensor de la privacidad cibernética." />
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml" />
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="container">
+  <header>
+    <h1><a href="/">404 - Página no encontrada</a></h1>
+  </header>
+  <main>
+    
+<div class="main container">
+		<P>Lo sentimos, la página que estás buscando no existe.</p>
+</div>
+  </main>
+  <footer>
+    <p>by valdemar - © 2025</p>
+  <a href="https://vlozada.com">::about</a>  <a href="/">::logs</a>  <a href="/feed.xml">::feed</a>
+  </footer>
+</body>
+</html>

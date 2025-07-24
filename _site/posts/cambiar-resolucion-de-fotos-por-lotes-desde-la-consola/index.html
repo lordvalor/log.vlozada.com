@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Cambiar resolución de fotos por lotes desde la consola.</title>
+  <meta name="description" content="Manipulación de imagenes con imagemagick" />
+  <meta name="author" content="Valdemar Lozada" />
+
+  <!-- Open Graph (Facebook, Mastodon, etc) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Cambiar resolución de fotos por lotes desde la consola." />
+  <meta property="og:description" content="Manipulación de imagenes con imagemagick" />
+  <meta property="og:url" content="https://log.vlozada.com//posts/cambiar-resolucion-de-fotos-por-lotes-desde-la-consola/" />
+  <meta property="og:site_name" content="log.vlozada.com" />
+
+  <!-- Twitter Card (también funciona para Mastodon) -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Valdemar Lozada" />
+  <meta name="twitter:description" content="Administrador de sistemas GNU/Linux, entusiasta del desarrollo web y defensor de la privacidad cibernética." />
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml" />
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="container">
+  <header>
+    <h1><a href="/">Cambiar resolución de fotos por lotes desde la consola.</a></h1>
+  </header>
+  <main>
+    <p>Hace unos días tenia la tarea de subir ciertas fotografías tomadas con una cámara de 8MP a una pagina web, el problema realmente era que cada fotografías pesaba 2.3MB con una resolución de 3264×2448, algo que a mi parecer no es nada indicado para una galería fotográfica y mucho menos aún con la conexión que tenemos en el país.</p>
+<p>El asunto era cambiar o bajar dicho tamaño sin sacrificar la calidad de la fotografías y hacerlo a 28 imágenes, investigando un poco di con una forma bastante sencilla a través de la consola linux el único requerimiento para dicha tarea es tener <a href="https://www.imagemagick.org/script/index.php">imagemagick</a> instalado.</p>
+<h2>Instalando imagemagick en debian</h2>
+<pre><code class="language-console">sudo apt-get install imagemagick
+</code></pre>
+<p>luego que ya está instalado vamos al directorio en donde están las fotografías que vamos trabajar.</p>
+<pre><code class="language-console">cd /home/ususario/imagenes/album
+</code></pre>
+<p>y ejecutamos lo siguiente:</p>
+<pre><code class="language-bash">for IMG in `ls *.jpg`; do convert -sample 20%X20% -quality 85 $IMG reducido-$IMG; done
+</code></pre>
+<p>el tiempo que tarda dependerá de la cantidad de fotos y el tamaño de cada una de ellas. El nombre reducido-$IMG seria el prefijo que se le asigna a la fotografía dimensionada, podemos usar el que veamos más conveniente</p>
+<p>también podemos hacerlo con otras extensiones como .png, otro detalle que debemos estar pendiente es que algunas cámaras colocan las extensiones con mayúsculas <code>.JPG</code> si es así, debemos cambiar dependiendo de nuestros caso. De igual forma podemos jugar con el tamaño, yo logre una buena imagen de una original de 2.3 mb (3264×2448) a una de 66,2kb (653×490).</p>
+<p>espero que les sirva de ayuda.</p>
+
+  </main>
+  <footer>
+    <p>by valdemar - © 2025</p>
+  <a href="https://vlozada.com">::about</a>  <a href="/">::logs</a>  <a href="/feed.xml">::feed</a>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,59 @@
+/* Estilo base */
+body {
+  background-color: #000; /* solarized dark */
+  color: #999;
+  font-family: 'Fira Code', monospace;
+  margin: 0;
+  padding: 1rem;
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+/* Contenedor adaptable */
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Links */
+a {
+  color: #C70038;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Preformat (para MOTD y blocks estilo consola) */
+pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-x: auto;
+  font-family: monospace;
+  background-color: #000;
+  color: #eee;
+  overflow-x: auto;
+  padding: 1rem;
+}
+
+/* Footer comandos */
+footer pre {
+  font-size: 0.9rem;
+  text-align: center;
+  padding-top: 1rem;
+  border-top: 1px solid #586e75;
+  margin-top: 2rem;
+}
+
+/* Cursor animado */
+.blink::after {
+  content: "_";
+  animation: blink 1s steps(2, start) infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}

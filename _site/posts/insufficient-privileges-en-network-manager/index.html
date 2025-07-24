@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Solucionando problema (32) insufficient privileges en network-manager</title>
+  <meta name="description" content="network-manager" />
+  <meta name="author" content="Valdemar Lozada" />
+
+  <!-- Open Graph (Facebook, Mastodon, etc) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Solucionando problema (32) insufficient privileges en network-manager" />
+  <meta property="og:description" content="network-manager" />
+  <meta property="og:url" content="https://log.vlozada.com//posts/insufficient-privileges-en-network-manager/" />
+  <meta property="og:site_name" content="log.vlozada.com" />
+
+  <!-- Twitter Card (también funciona para Mastodon) -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Valdemar Lozada" />
+  <meta name="twitter:description" content="Administrador de sistemas GNU/Linux, entusiasta del desarrollo web y defensor de la privacidad cibernética." />
+
+  <!-- RSS -->
+  <link rel="alternate" type="application/rss+xml" title="RSS" href="/feed.xml" />
+
+  <!-- Estilos -->
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="container">
+  <header>
+    <h1><a href="/">Solucionando problema (32) insufficient privileges en network-manager</a></h1>
+  </header>
+  <main>
+    <p>Al instalar Debian en una <a href="https://en.wikipedia.org/wiki/Acer_Aspire_One">Acer Aspire One d-250</a> Teniendo razones obvias de rendimiento me decido por <strong>Openbox</strong> como entorno de escritorio.</p>
+<p>Luego de mucho tiempo usando como gestor de interfaces de redes <strong>WICD</strong> decidí que era hora de darle una oportunidad al amado por mucho y odiado por algunos <strong>Network-Manager.</strong></p>
+<p>Posterior a la configuración de <strong>tint2,</strong> para poder hacer que network-manager se muestre en el systemtray días después tengo la oportunidad de probar mi conexión wifi pero resulta que al tratar de conectarme, me tope con un fabuloso aviso diciéndome “Failed to add new connection: (32) insufficient privileges”.</p>
+<p>Entonces procedo a investigar cual es la causa de este inconveniente.</p>
+<p>y simplemente es que como yo siempre instalo Debian como sistema base &quot;Netinstall&quot; y luego voy instalando y configurando lo que necesito, encontré la solución y realmente es sencilla.</p>
+<h3>Solucionando problema (32) insufficient privileges en network-manager</h3>
+<p>Primero, debemos agregar nuestro usuario regular al group <code>netdev</code> de la siguiente manera:</p>
+<p><code>adduser tusuario netdev</code></p>
+<p>Posteriormente nos vamos al directorio.</p>
+<p><code>cd /etc/polkit-1/localauthority/50-local.d/</code>
+allí creamos un archivo con el siguiente nombre:</p>
+<p><code>org.freedesktop.NetworkManager.pkla</code>
+Luego y con el editor de su preferencia le agregamos lo siguiente.</p>
+<pre><code class="language-console">Identity=unix-group:netdev
+Action=org.freedesktop.NetworkManager.*
+ResultAny=yes
+ResultInactive=no
+ResultActive=yes
+</code></pre>
+<p>Guardamos y Reiniciamos el Network-manager</p>
+<pre><code class="language-console"># /etc/init.d/network-manager restart
+</code></pre>
+<p>Listo ya deberíamos poder acceder a nuestra conexión wifi desde el applet del network-manager.</p>
+
+  </main>
+  <footer>
+    <p>by valdemar - © 2025</p>
+  <a href="https://vlozada.com">::about</a>  <a href="/">::logs</a>  <a href="/feed.xml">::feed</a>
+  </footer>
+</body>
+</html>
