@@ -19,9 +19,9 @@ jobs:
       - name: Sync Files
         uses: SamKirkland/web-deploy@v1
         with:
-          target-server: ${{ secrets.SERVER }}
-          remote-user: ${{ secrets.USER }}
+          target-server: ${{ secrets.SSH_SERVER }}
+          remote-user: ${{ secrets.SSH_USER }}
           private-ssh-key: ${{ secrets.SSH_KEY }}
-          destination-path: ${{ secrets.PATH }}
+          destination-path: ${{ secrets.SSH_PATH }}
           source-path: ${{ github.workspace }}/_site/
           rsync-options: --dry-run  --verbose --progress --human-readable --exclude=node_modules* --exclude=.git*  --exclude=.gitignore
